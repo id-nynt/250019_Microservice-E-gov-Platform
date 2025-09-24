@@ -1,0 +1,16 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+services:
+  coursesearch:
+    image: coursesearch
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 6003:6003
+    networks:
+      - universe-network
+
+networks:
+  universe-network:
+    external: true

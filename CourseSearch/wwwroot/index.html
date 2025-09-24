@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Course Search</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Course Search</h1>
+
+        <div class="form-row">
+            <input id="keyword" type="text" placeholder="Keyword (course name or code)" />
+        </div>
+
+        <div class="form-row">
+            <input id="location" type="text" placeholder="Location (leave blank for Any)" />
+        </div>
+
+        <div class="form-row">
+            <select id="area">
+                <option value="Any">Any area</option>
+                <option>Information Technology</option>
+                <option>Health</option>
+                <option>Trades</option>
+                <option>Hospitality</option>
+                <option>Creative Arts</option>
+                <option>Business and Administration</option>
+                <option>Agriculture</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <select id="studyOption">
+                <option value="Any">Any study option</option>
+                <option>Full time</option>
+                <option>Part time</option>
+                <option>Self-paced</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <button id="searchBtn">Search</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
