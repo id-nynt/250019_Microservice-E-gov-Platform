@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceUniverse - Government Services Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .navbar {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .hero {
+            background: #3498db;
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .provider-details h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+        }
+
+        .services-list {
+            display: none;
+            padding: 0;
+        }
+
+        .services-list.open {
+            display: block;
+        }
+
+        .service-item {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
+
+        .service-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .service-item.available {
+            color: #007bff;
+        }
+
+        .service-item.unavailable {
+            color: #6c757d;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="#" class="navbar-brand">ServiceUniverse</a>
+            <a href="/swagger" target="_blank" style="color: white;">API Docs</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Welcome to ServiceUniverse</h1>
+        <p>Your platform for E-Government services</p>
+    </div>
+
+    <div class="container">
+        <div class="services-grid">
+            <!-- Medicare -->
+            <div class="service-card">
+                <div class="card-header" onclick="toggleServices('medicare')">
+                    <div class="provider-details">
+                        <h3>Medicare</h3>
+                        <p>Healthcare services</p>
+                    </div>
+                </div>
+                <div class="services-list" id="medicare-services">
+                    <div class="service-item available" onclick="openService('/ApiGateway/Vaccination')">
+                        Proof of Vaccination (Available)
+                    </div>
+                    <div class="service-item unavailable">
+                        Claim Medicare (Coming Soon)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Australia Post -->
+            <div class="service-card">
+                <div class="card-header" onclick="toggleServices('post')">
+                    <div class="provider-details">
+                        <h3>Australia Post</h3>
+                        <p>Postal services</p>
+                    </div>
+                </div>
+                <div class="services-list" id="post-services">
+                    <div class="service-item available" onclick="openService('/ApiGateway/Tracking')">
+                        Parcel Tracking (Available)
+                    </div>
+                    <div class="service-item unavailable">
+                        Bill Payment (Coming Soon)
+                    </div>
+                </div>
+            </div>
+
+            <!-- V-Edu Universe -->
+            <div class="service-card">
+                <div class="card-header" onclick="toggleServices('vedu')">
+                    <div class="provider-details">
+                        <h3>V-Edu Universe</h3>
+                        <p>Education services</p>
+                    </div>
+                </div>
+                <div class="services-list" id="vedu-services">
+                    <div class="service-item available" onclick="openService('/ApiGateway/Courses')">
+                        Course Search (Available)
+                    </div>
+                    <div class="service-item unavailable">
+                        Enrollment (Coming Soon)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tax Service -->
+            <div class="service-card">
+                <div class="card-header" onclick="toggleServices('tax')">
+                    <div class="provider-details">
+                        <h3>Tax Office Universe</h3>
+                        <p>Tax services</p>
+                    </div>
+                </div>
+                <div class="services-list" id="tax-services">
+                    <div class="service-item available" onclick="openService('/ApiGateway/Tax')">
+                        Tax Calculator (Available)
+                    </div>
+                    <div class="service-item unavailable">
+                        Tax Return (Coming Soon)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transport Service -->
+            <div class="service-card">
+                <div class="card-header" onclick="toggleServices('transport')">
+                    <div class="provider-details">
+                        <h3>TransportUniverse</h3>
+                        <p>Transport services</p>
+                    </div>
+                </div>
+                <div class="services-list" id="transport-services">
+                    <div class="service-item unavailable">
+                        Trip Planner (Coming Soon)
+                    </div>
+                    <div class="service-item unavailable">
+                        Fare Payment and Account Management (Coming Soon)
+                    </div>
+                </div>
+            </div>
+
+            <!-- NDIS Service -->
+            <div class="service-card">
+                <div class="card-header" onclick="toggleServices('ndis')">
+                    <div class="provider-details">
+                        <h3>NDIS</h3>
+                        <p>Funding services</p>
+                    </div>
+                </div>
+                <div class="services-list" id="ndis-services">
+                    <div class="service-item unavailable">
+                        Plan Management (Coming Soon)
+                    </div>
+                    <div class="service-item unavailable">
+                        Directory & Booking (Coming Soon)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleServices(providerId) {
+            const servicesList = document.getElementById(providerId + '-services');
+            servicesList.classList.toggle('open');
+        }
+
+        function openService(path) {
+            window.location.href = path;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+@APIGateway_HostAddress = http://localhost:5000
+
+### Test Docker Container Health
+GET {{APIGateway_HostAddress}}/health
+Accept: application/json
+
+###
+
+### ServiceUniverse Web Interface (Docker)
+GET {{APIGateway_HostAddress}}/
+Accept: text/html
+
+###
+
+### ServiceUniverse Web Interface - Main Page
+GET {{APIGateway_HostAddress}}/index.html
+Accept: text/html
+
+###
+
+### API Documentation (Docker)
+GET {{APIGateway_HostAddress}}/swagger
+Accept: text/html
+
+###
+
+### Tutorial Pattern Routes (Docker)
+
+# Access Vaccination service through Gateway
+GET {{APIGateway_HostAddress}}/ApiGateway/Vaccination
+Accept: text/html
+
+###
+
+# Access Tracking service through Gateway  
+GET {{APIGateway_HostAddress}}/ApiGateway/Tracking
+Accept: text/html
+
+###
+
+# Access Courses service through Gateway
+GET {{APIGateway_HostAddress}}/ApiGateway/Courses
+Accept: text/html
+
+###
+
+# Access Tax service through Gateway
+GET {{APIGateway_HostAddress}}/ApiGateway/Tax
+Accept: text/html
+
+###
+
+### API Endpoints via Gateway (Docker)
+
+# Get all courses via API 
+GET {{APIGateway_HostAddress}}/ApiGateway/CoursesApi
+Accept: application/json
+
+###
+
+# Calculate tax via API
+POST {{APIGateway_HostAddress}}/ApiGateway/TaxCalculate
+Content-Type: application/json
+
+{
+  "income": 75000
+}
+
+###
