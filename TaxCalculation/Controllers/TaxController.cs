@@ -5,13 +5,10 @@ using TaxCalculation.Models;
 namespace TaxCalculation.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/tax")]
     public class TaxController : ControllerBase
     {
         private readonly IConfiguration _config;
-
-        // optional simple in-memory history for demo
-        private static readonly List<TaxResult> _history = new();
 
         public TaxController(IConfiguration config)
         {
@@ -31,19 +28,10 @@ namespace TaxCalculation.Controllers
             {
                 Income = req.Income,
                 Tax = Math.Round(tax, 2),
-                EffectiveRate = req.Income == 0 ? 0 : Math.Round(tax / req.Income, 4) // fraction
+                EffectiveRate = req.Income == 0 ? 0 : Math.Round(tax / req.Income, 4)
             };
 
-            // add to in-memory history
-            _history.Add(result);
-
             return Ok(result);
-        }
-
-        [HttpGet("history")]
-        public IActionResult History()
-        {
-            return Ok(_history);
         }
 
         // Helper: progressive tax calculation
@@ -60,7 +48,6 @@ namespace TaxCalculation.Controllers
 
                 if (income <= upper)
                 {
-                    // Apply formula: BaseTax + (income - lower) * Rate
                     return b.BaseTax + (income - lower) * b.Rate;
                 }
             }

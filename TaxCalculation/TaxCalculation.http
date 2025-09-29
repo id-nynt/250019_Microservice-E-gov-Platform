@@ -1,4 +1,4 @@
-@TaxCalculation_HostAddress = http://localhost:6002
+@TaxCalculation_HostAddress = http://localhost:004
 
 GET {{TaxCalculation_HostAddress}}/weatherforecast/
 Accept: application/json

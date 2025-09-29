@@ -6,13 +6,16 @@ using CourseSearch.Models;
 namespace CourseSearch.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/courses")]
     public class CoursesController : ControllerBase
     {
         private readonly CourseDbContext _db;
-        public CoursesController(CourseDbContext db) => _db = db;
+        public CoursesController(CourseDbContext db)
+        {
+            _db = db;
+        }
 
-        // GET /api/courses?keyword=web&location=Melbourne&area=Information%20Technology&studyOption=Part%20time
+        // GET /CourseSearch?keyword=&location=&area=&studyOption=
         [HttpGet]
         public async Task<IActionResult> Search([FromQuery] string? keyword, [FromQuery] string? location,
                                                 [FromQuery] string? area, [FromQuery] string? studyOption)
@@ -50,7 +53,7 @@ namespace CourseSearch.Controllers
             return Ok(results);
         }
 
-        // Optional: get all courses
+        // Get all courses
         [HttpGet("all")]
         public async Task<IActionResult> All() => Ok(await _db.Courses.OrderBy(c => c.CourseArea).ToListAsync());
     }

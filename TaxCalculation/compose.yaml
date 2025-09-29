@@ -1,13 +1,16 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
-
 services:
-  taxcalculation:
-    image: taxcalculation
+  testtaxcalculation:
+    container_name: "taxcalculation"
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - 6002:6002
+      - "5004:80"
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - DOTNET_RUNNING_IN_CONTAINER=true
     networks:
       - universe-network
 

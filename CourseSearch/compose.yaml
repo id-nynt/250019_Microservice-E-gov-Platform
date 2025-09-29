@@ -1,13 +1,17 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
-
 services:
   coursesearch:
-    image: coursesearch
+    container_name: "coursesearch"
     build:
       context: .
       dockerfile: ./Dockerfile
+    volumes:
+      - ./data:/app/data
     ports:
-      - 6003:6003
+      - "5003:80"
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DB_PATH=/app/data/courses.db
     networks:
       - universe-network
 
