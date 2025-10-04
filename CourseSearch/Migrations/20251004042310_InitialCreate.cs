@@ -7,7 +7,7 @@
 namespace CourseSearch.Migrations
 {
     /// <inheritdoc />
-    public partial class Add_Data_2 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,28 +42,28 @@ namespace CourseSearch.Migrations
                     { "AG05", "Agriculture", "Sustainable Farming Practices", "6 months", 7000m, "Graduate Certificate", "Sydney", "Self-paced" },
                     { "AG06", "Agriculture", "Rural Operations", "9 months", 3000m, "Certificate II", "Regional NSW", "Full time" },
                     { "AG07", "Agriculture", "Viticulture", "18 months", 8500m, "Diploma", "Adelaide", "Part time" },
-                    { "AG08", "Agriculture", "Graduate Certificate in Agricultural Economics", "12 months", 9000m, "Graduate Certificate", "Canberra", "Full time" },
+                    { "AG08", "Agriculture", "Agricultural Economics", "12 months", 9000m, "Graduate Certificate", "Canberra", "Full time" },
                     { "AG09", "Agriculture", "Wool Classing", "12 months", 5500m, "Certificate IV", "Melbourne", "Full time" },
                     { "AG10", "Agriculture", "Animal Science", "36 months", 28000m, "Diploma", "Sydney", "Full time" },
                     { "AG11", "Agriculture", "Organic Farming", "18 months", 9000m, "Diploma", "Regional QLD", "Full time" },
-                    { "AG12", "Agriculture", "Graduate Diploma in Crop Science", "18 months", 11000m, "Graduate Diploma", "Brisbane", "Part time" },
+                    { "AG12", "Agriculture", "Crop Science", "18 months", 11000m, "Graduate Diploma", "Brisbane", "Part time" },
                     { "AG13", "Agriculture", "Agricultural Machinery", "12 months", 6000m, "Certificate III", "Adelaide", "Full time" },
                     { "AG14", "Agriculture", "Aquaculture", "12 months", 6500m, "Certificate IV", "Perth", "Full time" },
                     { "AG15", "Agriculture", "Sustainable Agriculture", "24 months", 20000m, "Diploma", "Canberra", "Full time" },
                     { "BUS101", "Business and Administration", "Business Administration Basics", "6 months", 2000m, "Diploma", "Sydney", "Self-paced" },
                     { "BUS201", "Business and Administration", "Leadership", "12 months", 4500m, "Certificate IV", "Melbourne", "Part time" },
                     { "BUS301", "Business and Administration", "Commerce", "36 months", 30000m, "Diploma", "Adelaide", "Full time" },
-                    { "BUS401", "Business and Administration", "Graduate Diploma in Project Management", "12 months", 12000m, "Graduate Diploma", "Brisbane", "Full time" },
+                    { "BUS401", "Business and Administration", "Project Management", "12 months", 12000m, "Graduate Diploma", "Brisbane", "Full time" },
                     { "BUS501", "Business and Administration", "Business Administration", "24 months", 35000m, "Diploma", "Canberra", "Full time" },
                     { "BUS601", "Business and Administration", "Advanced Human Resource Management", "12 months", 12500m, "Graduate Diploma", "Sydney", "Full time" },
                     { "BUS602", "Business and Administration", "Small Business Management", "12 months", 4800m, "Certificate IV", "Melbourne", "Part time" },
                     { "BUS603", "Business and Administration", "International Business", "24 months", 33000m, "Master", "Canberra", "Full time" },
-                    { "BUS604", "Business and Administration", "Graduate Certificate in Logistics and Supply Chain", "12 months", 9500m, "Graduate Certificate", "Brisbane", "Part time" },
+                    { "BUS604", "Business and Administration", "Logistics and Supply Chain", "12 months", 9500m, "Graduate Certificate", "Brisbane", "Part time" },
                     { "BUS605", "Business and Administration", "Marketing and Communications", "12 months", 5200m, "Certificate IV", "Adelaide", "Full time" },
                     { "BUS606", "Business and Administration", "Accounting", "36 months", 30000m, "Diploma", "Sydney", "Full time" },
                     { "BUS607", "Business and Administration", "E-Commerce", "18 months", 10000m, "Diploma", "Melbourne", "Full time" },
                     { "BUS608", "Business and Administration", "Business Operations", "9 months", 3500m, "Certificate III", "Brisbane", "Part time" },
-                    { "BUS609", "Business and Administration", "Graduate Diploma in Finance", "18 months", 12000m, "Graduate Diploma", "Sydney", "Part time" },
+                    { "BUS609", "Business and Administration", "Finance", "18 months", 12000m, "Graduate Diploma", "Sydney", "Part time" },
                     { "BUS610", "Business and Administration", "Master of Entrepreneurship", "24 months", 34000m, "Master", "Canberra", "Full time" },
                     { "BUS611", "Business and Administration", "Project Coordination", "12 months", 4700m, "Certificate IV", "Perth", "Part time" },
                     { "BUS612", "Business and Administration", "Advanced Diploma in Strategic Leadership", "18 months", 11500m, "Diploma", "Sydney", "Full time" },
@@ -92,13 +92,13 @@ namespace CourseSearch.Migrations
                     { "HLT701", "Health", "Dental Radiography", "12 months", 12000m, "Certificate IV", "Canberra", "Part time" },
                     { "HLT800", "Health", "Allied Health Assistance", "12 months", 5200m, "Certificate IV", "Sydney", "Full time" },
                     { "HLT801", "Health", "Paramedical Science", "18 months", 10500m, "Diploma", "Brisbane", "Part time" },
-                    { "HLT802", "Health", "Graduate Certificate in Mental Health Nursing", "12 months", 8000m, "Graduate Certificate", "Melbourne", "Part time" },
+                    { "HLT802", "Health", "Mental Health Nursing", "12 months", 8000m, "Graduate Certificate", "Melbourne", "Part time" },
                     { "HLT803", "Health", "Advanced Pathology Collection", "9 months", 6200m, "Diploma", "Adelaide", "Full time" },
                     { "HLT804", "Health", "Midwifery Practice", "24 months", 20000m, "Master", "Canberra", "Full time" },
                     { "HLT805", "Health", "Physiotherapy Rehabilitation Techniques", "18 months", 11000m, "Graduate Diploma", "Wollongong", "Part time" },
                     { "HLT806", "Health", "Nutrition and Dietetics", "12 months", 7500m, "Diploma", "Sydney", "Full time" },
                     { "HLT807", "Health", "Public Health Epidemiology", "24 months", 17000m, "Master", "Brisbane", "Part time" },
-                    { "HLT808", "Health", "Graduate Certificate in Occupational Therapy", "12 months", 9500m, "Graduate Certificate", "Perth", "Part time" },
+                    { "HLT808", "Health", "Occupational Therapy", "12 months", 9500m, "Graduate Certificate", "Perth", "Part time" },
                     { "HLT809", "Health", "Community Aged Care Support", "9 months", 4800m, "Certificate IV", "Melbourne", "Full time" },
                     { "HLT810", "Health", "Speech Pathology Fundamentals", "12 months", 7800m, "Diploma", "Canberra", "Full time" },
                     { "HLT811", "Health", "Healthcare Management", "18 months", 12000m, "Graduate Diploma", "Sydney", "Full time" },

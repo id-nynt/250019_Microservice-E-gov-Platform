@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseSearch.Migrations
 {
     [DbContext(typeof(CourseDbContext))]
-    [Migration("20251004034950_Add_Data_2")]
-    partial class Add_Data_2
+    [Migration("20251004042310_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -412,7 +412,7 @@ namespace CourseSearch.Migrations
                         {
                             CourseCode = "HLT802",
                             CourseArea = "Health",
-                            CourseName = "Graduate Certificate in Mental Health Nursing",
+                            CourseName = "Mental Health Nursing",
                             Duration = "12 months",
                             EstimatedFee = 8000m,
                             Level = "Graduate Certificate",
@@ -478,7 +478,7 @@ namespace CourseSearch.Migrations
                         {
                             CourseCode = "HLT808",
                             CourseArea = "Health",
-                            CourseName = "Graduate Certificate in Occupational Therapy",
+                            CourseName = "Occupational Therapy",
                             Duration = "12 months",
                             EstimatedFee = 9500m,
                             Level = "Graduate Certificate",
@@ -1050,7 +1050,7 @@ namespace CourseSearch.Migrations
                         {
                             CourseCode = "BUS401",
                             CourseArea = "Business and Administration",
-                            CourseName = "Graduate Diploma in Project Management",
+                            CourseName = "Project Management",
                             Duration = "12 months",
                             EstimatedFee = 12000m,
                             Level = "Graduate Diploma",
@@ -1105,7 +1105,7 @@ namespace CourseSearch.Migrations
                         {
                             CourseCode = "BUS604",
                             CourseArea = "Business and Administration",
-                            CourseName = "Graduate Certificate in Logistics and Supply Chain",
+                            CourseName = "Logistics and Supply Chain",
                             Duration = "12 months",
                             EstimatedFee = 9500m,
                             Level = "Graduate Certificate",
@@ -1160,7 +1160,7 @@ namespace CourseSearch.Migrations
                         {
                             CourseCode = "BUS609",
                             CourseArea = "Business and Administration",
-                            CourseName = "Graduate Diploma in Finance",
+                            CourseName = "Finance",
                             Duration = "18 months",
                             EstimatedFee = 12000m,
                             Level = "Graduate Diploma",
@@ -1281,7 +1281,7 @@ namespace CourseSearch.Migrations
                         {
                             CourseCode = "AG08",
                             CourseArea = "Agriculture",
-                            CourseName = "Graduate Certificate in Agricultural Economics",
+                            CourseName = "Agricultural Economics",
                             Duration = "12 months",
                             EstimatedFee = 9000m,
                             Level = "Graduate Certificate",
@@ -1325,7 +1325,7 @@ namespace CourseSearch.Migrations
                         {
                             CourseCode = "AG12",
                             CourseArea = "Agriculture",
-                            CourseName = "Graduate Diploma in Crop Science",
+                            CourseName = "Crop Science",
                             Duration = "18 months",
                             EstimatedFee = 11000m,
                             Level = "Graduate Diploma",
