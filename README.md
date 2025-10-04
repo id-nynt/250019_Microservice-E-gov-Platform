@@ -1,4 +1,4 @@
-# ServiceUniverse � Student Dev Guide
+# ServiceUniverse � Guide
 
 ## Overview
 
