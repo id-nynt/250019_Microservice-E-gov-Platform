@@ -1,0 +1,34 @@
+:root{
+  --bg:#0e0f12; --panel:#171a21; --text:#e8ecf1; --muted:#9aa4b2; --primary:#4da3ff; --border:#2a2f3a;
+  --ok:#2ecc71; --warn:#f1c40f; --bad:#e74c3c;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0; background:var(--bg); color:var(--text); font:14px/1.6 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+
+.topbar{display:flex; align-items:center; gap:12px; padding:14px 20px; background:var(--panel); border-bottom:1px solid var(--border)}
+.topbar h1{margin:0; font-size:18px}
+
+.container{max-width:900px; margin:24px auto; padding:0 16px}
+.searchBox{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px}
+.searchBox input{
+  flex:1; min-width:260px; background:#0d1016; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:10px 12px; outline:none
+}
+button{background:#222836; color:var(--text); border:1px solid var(--border); padding:10px 12px; border-radius:8px; cursor:pointer}
+button.primary{background:var(--primary); border-color:transparent; color:#061423}
+button:hover{filter:brightness(1.06)}
+
+.msg{min-height:22px; margin:6px 2px 14px}
+.muted{color:var(--muted)}
+.error{color:#ff9b9b}
+.hidden{display:none}
+
+.details{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px}
+.details h2{margin:0 0 10px 0; font-size:16px}
+.grid{display:grid; grid-template-columns:150px 1fr; gap:10px}
+.label{color:var(--muted)}
+
+.empty{border:1px dashed var(--border); border-radius:12px; padding:18px; text-align:center; color:var(--muted); background:#11141a}
+
+.footer{display:flex; justify-content:center; padding:20px; color:var(--muted)}
+.footer a{color:var(--primary); text-decoration:none}
