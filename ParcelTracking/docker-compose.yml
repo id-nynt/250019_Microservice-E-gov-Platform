@@ -1,0 +1,13 @@
+services:
+  parceltracking:
+    build: .
+    container_name: parceltracking-service
+    ports:
+      - "5173:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    # volumes:
+    #   - .:/app
+    #   - /app/bin
+    #   - /app/obj

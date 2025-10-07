@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Parcel Tracking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Parcel Tracking</h1>
+  </header>
+
+  <main class="container">
+    <!-- Search-only UI -->
+    <section class="searchBox">
+      <input id="trackingInput" type="text" placeholder="Enter tracking number (e.g., AP100001)" />
+      <button id="btnSearch" class="primary">Search</button>
+      <button id="btnClear">Clear</button>
+    </section>
+
+    <!-- Message line (errors / tips) -->
+    <div id="msg" class="msg muted"></div>
+
+    <!-- Details panel (shown only when a valid result is returned) -->
+    <section id="details" class="details hidden">
+      <h2>Details</h2>
+      <div class="grid">
+        <div class="label">Tracking #</div><div id="dTracking">-</div>
+        <div class="label">Status</div><div id="dStatus">-</div>
+        <div class="label">Location</div><div id="dLocation">-</div>
+        <div class="label">ETA (UTC)</div><div id="dEta">-</div>
+        <div class="label">History</div>
+        <div><pre id="dHistory" class="muted">N/A</pre></div>
+      </div>
+    </section>
+
+    <!-- Empty state when nothing is shown yet -->
+    <section id="empty" class="empty">
+      Please enter a tracking number and click <strong>Search</strong>.
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a href="/swagger" target="_blank">Swagger</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
