@@ -1,123 +1,224 @@
-# ServiceUniverse � Guide
+# ServiceUniverse - Guide
 
 ## Overview
 
-- .NET 8 API Gateway proxies HTML UIs, static assets, forms, and APIs to microservices running in Docker.
+- .NET 8 API Gateway proxies HTML UIs, static assets, forms, and APIs to three microservices running in Docker.
 - Public routes exposed by the gateway (hosted at `http://localhost:5000`):
-  - Web UIs: `/ApiGateway/Courses`, `/ApiGateway/Tax`, `/ApiGateway/Vaccination`, `/ApiGateway/Tracking`
-  - APIs (absolute, for UI JavaScript): `/api/courses`, `/api/courses/all`, `/api/tax`, `/api/tax/calculate`
+  - Web UIs: `/ApiGateway/Courses`, `/ApiGateway/Tax`, `/ApiGateway/Parcels`
+  - APIs (absolute, for UI JavaScript): `/api/courses`, `/api/tax/calculate`, `/api/parcels/{trackingNumber}`
 - The gateway also rewrites relative paths inside HTML so your CSS/JS/images work without changing microservice code.
 
-## What each microservice must keep
+## Microservices Architecture
 
-- Docker/container
-  - Container name must match the gateway DNS name:
-    - `coursesearch`, `taxcalculation`, `vaccination`, `tracking`
-  - The app must listen on container port `80` (host port can be anything except available ones - 5000, 5003, 5004).
-  - All services run on the same Docker network (universe-network).
-- ASP.NET Core
-  - UI at root `/` with `UseDefaultFiles()` and `UseStaticFiles()`.
-  - Static files referenced relatively (e.g., `script.js`, `css/site.css`, not `/css/site.css`).
-  - APIs under `/api/...` (examples below).
-  - Swagger at `/swagger` (optional but recommended).
-- API paths expected by the gateway/UI
-  - CourseSearch: `GET /api/courses`, `GET /api/courses/all` (supports `keyword`, `location`, `area`, `studyOption`).
-  - TaxCalculation: `POST /api/tax/calculate` (JSON body like `{ "income": 75000 }`).
+### 1. CourseSearch Service (Port 5003)
 
-## Example docker-compose service
+- **Purpose**: V-Edu (Vocational Education) course search and discovery
+- **Database**: SQLite with course catalog
+- **Web UI**: Course search form with filters for keyword, location, area, and study options
+- **API Endpoints**:
+  - `GET /api/courses` - Search courses with query parameters
+
+### 2. TaxCalculation Service (Port 5004)
+
+- **Purpose**: Progressive tax calculation for Australian tax system
+- **Features**: Configurable tax brackets, effective rate calculation
+- **Web UI**: Tax calculator form with income input
+- **API Endpoints**:
+  - `POST /api/tax/calculate` - Calculate tax for given income
+
+### 3. ParcelTracking Service (Port 5173)
+
+- **Purpose**: Australia Post parcel tracking and status monitoring
+- **Database**: SQLite with parcel tracking records
+- **Features**: Track parcels by tracking number, view status and ETA
+- **API Endpoints**:
+  - `GET /api/parcels/{trackingNumber}` - Get parcel details by tracking number
+
+## Docker Configuration Requirements
+
+### Container Specifications
+
+- **Container names** must match the gateway DNS names:
+  - `coursesearch` - CourseSearch service
+  - `taxcalculation` - TaxCalculation service
+  - `parceltracking-service` - ParcelTracking service
+- **Container port**: All services must listen on port `80`
+- **Host ports**:
+  - APIGateway: `5000:80`
+  - CourseSearch: `5003:80`
+  - TaxCalculation: `5004:80`
+  - ParcelTracking: `5173:80`
+- **Network**: All services run on `universe-network`
+
+### ASP.NET Core Requirements
+
+- UI at root `/` with `UseDefaultFiles()` and `UseStaticFiles()`
+- Static files referenced relatively (e.g., `script.js`, `style.css`)
+- APIs under `/api/...` namespace
+- Swagger at `/swagger` (recommended)
+
+### API Contracts Expected by Gateway
+
+- **CourseSearch**:
+  - `GET /api/courses` - Supports query parameters: `keyword`, `location`, `area`, `studyOption`
+  - Returns array of course objects with properties: `CourseName`, `CourseCode`, `Location`, `CourseArea`, `StudyOption`
+- **TaxCalculation**:
+  - `POST /api/tax/calculate` - Expects JSON: `{ "income": 75000 }`
+  - Returns: `{ "income": 75000, "tax": 12345.67, "effectiveRate": 0.1646 }`
+- **ParcelTracking**:
+  - `GET /api/parcels/{trackingNumber}` - Returns parcel details
+  - Returns: `{ "id": 1, "trackingNumber": "ABC123", "status": "In Transit", "location": "Sydney", "eta": "2024-01-15T10:00:00Z", "history": "[]" }`
+
+## Docker Compose Configuration
+
+### API Gateway compose.yml
 
 ```yaml
 services:
-  coursesearch:
-    container_name: "coursesearch" # MUST MATCH ABOVE
+  apigateway:
+    container_name: "apigateway"
     build:
       context: .
       dockerfile: ./Dockerfile
-    volumes:
-      - ./data:/app/data
     ports:
-      - "5003:80"
-    restart: always
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - DB_PATH=/app/data/courses.db
+      - 5000:80
     networks:
-      - universe-network # MUST MATCH
+      - universe-network
 
 networks:
-  universe-network: # MUST MATCH
+  universe-network:
     external: true
 ```
 
-## Quick test: current stage
+## Quick Start Guide
 
-1. Docker Desktop
+### Prerequisites
 
-- Start Docker Desktop.
-- Build network: `docker network create universe-network`
+- Docker Desktop running
 
-2. CourseSearch service
+### Setup Steps
 
-- Open VS Code window, open folder CourseSearch
-- Build and run: `docker-compose up --build`
-- UI: `http://localhost:5003/`
-- Swagger: `http://localhost:5003/swagger/index.html`
-- API checks:
-  - `GET /api/courses?keyword=IT`
-  - `GET /api/courses/all`
-  - Try filters: `keyword`, `location`, `area`, `studyOption`.
+1. **Create Docker Network**
 
-3. TaxCalculation service
+   ```bash
+   docker network create universe-network
+   ```
 
-- Open VS Code window, open folder TaxCalculation
-- Build and run: `docker-compose up --build`
-- UI: `http://localhost:5004/`
-- Swagger: `http://localhost:5004/swagger/index.html`
-- API check:
-  - `POST /api/tax/calculate` with JSON `{ "income": 75000 }`.
+2. **Run API Gateway and Microservices**
 
-4. API Gateway
+- Open Docker Desktop
+- Open all microservices and API gateway in separate VS Code windows and run in the terminal:
 
-- Open VS Code window, open folder APIGateway
-- Build and run: `docker-compose up --build`
-- Open gateway UI: `http://localhost:5000/`.
-- Swagger: `http://localhost:5004/swagger/index.html` or click the API Docs on top right corner.
-- Click on service to interact or use links:
-  - Course Search: `http://localhost:5000/ApiGateway/Courses`
-  - Tax Calculator: `http://localhost:5000/ApiGateway/Tax`
-- Interact with the UIs:
-  - Course Search should call `/api/courses` or `/api/courses/all` and return results.
-  - Tax Calculator should call `/api/tax` or `/api/tax/calculate` and return totals.
+  ```bash
+  docker-compose up --build
+  ```
+
+- Check Docker Desktop if all services and API gateway are running
+
+3. **Access Services**
+
+   **Via API Gateway (Primary Access Points):**
+
+   - **Main Portal**: http://localhost:5000
+   - **Course Search**: http://localhost:5000/ApiGateway/Courses
+   - **Tax Calculator**: http://localhost:5000/ApiGateway/Tax
+   - **Parcel Tracking**: http://localhost:5000/ApiGateway/Tracking
+
+   **Direct Service Access (Development/Testing):**
+
+   - **CourseSearch**: http://localhost:5003
+   - **TaxCalculation**: http://localhost:5004
+   - **ParcelTracking**: http://localhost:5173
+
+### API Testing
+
+1. **Via Webpage**
+
+- Click on Swagger button in each page to direct to the coresponding Swagger API.
+
+2. **Via Links**
+
+   - **Main Portal**: http://localhost:5000/swagger/index.html
+   - **Course Search**: http://localhost:5003/swagger/index.html
+   - **Tax Calculator**: http://localhost:5004/swagger/index.html
+   - **Parcel Tracking**: http://localhost:5173/swagger/index.html
 
 ## Troubleshooting
 
-- Plain HTML without styling/JS
-  - Ensure microservice HTML references assets relatively (`style.css`, `app.js`).
-- �No course found� when keyword exists
-  - UI sends params (e.g., `keyword`, `location`, `area`, `studyOption`). The gateway now forwards the full query string unchanged.
-  - Confirm the CourseSearch API parameter names match those.
-- 404 for `/api/...` from the UI
-  - The gateway exposes absolute `/api/*` routes. Make sure your UI calls `/api/...` (not the service URL).
-- 502/connection errors
-  - Verify container names and internal ports match `_serviceUrls`.
-  - Ensure services are running: `docker ps`.
+### Common Issues
 
-## Change the gateway if needed
+**Services not communicating:**
 
-- Only if a microservice uses a different container name, internal port, or API path.
-- Update the dictionaries in `Controllers/ApiGatewayController.cs`:
-  - `_serviceUrls` (container DNS + port 80)
-  - `_publicRoutes` (display segment used to rewrite HTML paths)
-- If API path differs (not `/api/courses` or `/api/tax/calculate`), add/adjust the absolute routes in the controller (e.g., `/api/your-endpoint`).
+- Verify all services are on `universe-network`: `docker network inspect universe-network`
+- Check container names match API Gateway expectations
+- Ensure containers are running: `docker ps`
+
+**API Gateway 502/503 errors:**
+
+- Verify container names in `ApiGatewayController.cs` match docker-compose
+- Check internal ports are set to 80 in all services
+- Review service logs: `docker logs <container-name>`
+
+**Static assets not loading (CSS/JS):**
+
+- Ensure HTML references assets relatively (`style.css`, not `/style.css`)
+- Check `UseDefaultFiles()` and `UseStaticFiles()` are configured in Program.cs
+
+**Search returning no results:**
+
+- Verify API parameter names match between UI and controller
+- Check database seeding and connection strings
+- Test API endpoints directly via Swagger
+
+**Port conflicts:**
+
+- Update host ports in docker-compose.yml if conflicts occur
+- Common conflicting ports: 5000, 3000, 8080, 80
+
+### Development Commands
+
+```bash
+# Clean restart all services
+docker-compose down
+docker-compose up --build
+
+# Start services
+docker-compose up
+
+# Remove network and recreate
+docker network rm universe-network
+docker network create universe-network
+```
+
+- Tip: refresh the webpage after each build
+
+## Architecture Summary
+
+**Key Components:**
+
+- **APIGateway (Port 5000)**: Central routing hub, service aggregation, unified UI
+- **CourseSearch (Port 5003)**: V-Edu course catalog with search functionality
+- **TaxCalculation (Port 5004)**: Progressive tax calculation engine
+- **ParcelTracking (Port 5173)**: Australia Post parcel tracking system
+
+**Container Communication:**
+
+- All services communicate via `universe-network`
+- Service discovery uses container names (`coursesearch`, `taxcalculation`, `tracking`)
+- Internal communication on port 80, external access via mapped host ports
+
+**Access Patterns:**
+
+- **Production**: All access via APIGateway (`http://localhost:5000/ApiGateway/...`)
+- **Development**: Direct service access for testing (`http://localhost:5003`, etc.)
+- **API Integration**: RESTful APIs accessible via gateway (`/api/courses`, `/api/tax/calculate`, `/api/parcels/{id}`)
 
 ---
 
-Short version
+## Quick Reference
 
-- Keep container name = gateway DNS (e.g., `coursesearch`).
-- Keep container port = 80.
-- Serve UI at `/`, static files relatively.
-- Expose APIs at `/api/...`.
-- Gateway entry point: `http://localhost:5000`.
-- Web UI via gateway: `/ApiGateway/Courses`, `/ApiGateway/Tax`.
-- APIs via gateway: `/api/courses`, `/api/courses/all`, `/api/tax`, `/api/tax/calculate`.
+- **Gateway entry point**: `http://localhost:5000`
+- **Web UIs via gateway**: `/ApiGateway/Courses`, `/ApiGateway/Tax`, `/ApiGateway/Parcels`
+- **APIs via gateway**: `/api/courses`, `/api/tax/calculate`, `/api/parcels/{trackingNumber}`
+- **Container names**: `coursesearch`, `taxcalculation`, `tracking`, `apigateway`
+- **Network**: `universe-network` (external, must be created first)
