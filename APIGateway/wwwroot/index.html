@@ -41,7 +41,7 @@
         }
 
         .hero {
-            background: #3498db;
+            background: #5080bb;
             color: white;
             text-align: center;
             padding: 4rem 2rem;
@@ -116,8 +116,8 @@
 <body>
     <nav class="navbar">
         <div class="navbar-content">
-            <a href="#" class="navbar-brand">ServiceUniverse</a>
-            <a href="/swagger" target="_blank" style="color: white;">API Docs</a>
+            <a href="#" target="_blank" class="navbar-brand">ServiceUniverse</a>
+            <a href="/swagger" target="_blank" style="color: white;">Swagger</a>
         </div>
     </nav>
 
@@ -155,7 +155,7 @@
                     </div>
                 </div>
                 <div class="services-list" id="post-services">
-                    <div class="service-item available" onclick="openService('/ApiGateway/Tracking')">
+                    <div class="service-item available" onclick="openService('/ApiGateway/Parcels')">
                         Parcel Tracking (Available)
                     </div>
                     <div class="service-item unavailable">
@@ -245,7 +245,7 @@
         }
 
         function openService(path) {
-            window.location.href = path;
+            window.open(path, '_blank');
         }
     </script>
 </body>

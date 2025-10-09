@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiGateway.Controllers
@@ -17,7 +16,7 @@ namespace ApiGateway.Controllers
             { "coursesearch", "http://coursesearch:80" },
             { "taxcalculation", "http://taxcalculation:80" },
             { "vaccination", "http://vaccination:80" },
-            { "tracking", "http://tracking:80" }
+            { "parcels", "http://parceltracking-service:80" }
         };
 
         // Used to rewrite relative paths in HTML (css/js/images/forms)
@@ -26,7 +25,7 @@ namespace ApiGateway.Controllers
             { "coursesearch", "Courses" },
             { "taxcalculation", "Tax" },
             { "vaccination", "Vaccination" },
-            { "tracking", "Tracking" }
+            { "parcels", "Parcels" }
         };
 
         public ApiGatewayController(IHttpClientFactory httpClientFactory)
@@ -75,23 +74,39 @@ namespace ApiGateway.Controllers
             var client = _httpClientFactory.CreateClient();
             var targetUrl = $"{_serviceUrls[service]}/{path}";
 
-            var formData = new List<KeyValuePair<string, string>>();
-            foreach (var item in Request.Form)
-                formData.Add(new(item.Key, item.Value.ToString()));
+            HttpContent content;
+            var contentType = Request.ContentType ?? "";
 
-            var content = new FormUrlEncodedContent(formData);
+            // Handle JSON content for API endpoints
+            if (contentType.Contains("application/json"))
+            {
+                using var reader = new StreamReader(Request.Body, Encoding.UTF8);
+                var body = await reader.ReadToEndAsync();
+                content = new StringContent(string.IsNullOrWhiteSpace(body) ? "{}" : body, Encoding.UTF8, "application/json");
+            }
+            else
+            {
+                // Handle form data for UI endpoints
+                var formData = new List<KeyValuePair<string, string>>();
+                foreach (var item in Request.Form)
+                    formData.Add(new(item.Key, item.Value.ToString()));
+                content = new FormUrlEncodedContent(formData);
+            }
+
             var response = await client.PostAsync(targetUrl, content);
-
             var responseContent = await response.Content.ReadAsStringAsync();
-            var contentType = response.Content.Headers.ContentType?.MediaType ?? "text/plain";
+            var responseContentType = response.Content.Headers.ContentType?.MediaType ?? "text/plain";
 
-            if (contentType.Contains("html"))
+            if (!response.IsSuccessStatusCode)
+                return StatusCode((int)response.StatusCode, responseContent);
+
+            if (responseContentType.Contains("html"))
             {
                 var segment = _publicRoutes.TryGetValue(service, out var seg) ? seg : service;
                 responseContent = FixHtmlPaths(responseContent, $"/ApiGateway/{segment}/");
             }
 
-            return Content(responseContent, contentType);
+            return Content(responseContent, responseContentType);
         }
 
         // =======================
@@ -116,48 +131,38 @@ namespace ApiGateway.Controllers
         [HttpGet("Vaccination/{**path}")]
         public Task<IActionResult> Vaccination(string? path = "") => ForwardGet("vaccination", path, true);
 
-        [HttpGet("Tracking")]
-        [HttpGet("Tracking/{**path}")]
-        public Task<IActionResult> Tracking(string? path = "") => ForwardGet("tracking", path, true);
+        [HttpPost("Vaccination/{**path}")]
+        public Task<IActionResult> VaccinationPost(string path) => ForwardPost("vaccination", path);
+
+        [HttpGet("Parcels")]
+        [HttpGet("Parcels/{**path}")]
+        public Task<IActionResult> Parcels(string? path = "") => ForwardGet("parcels", path, true);
+
+        [HttpPost("Parcels/{**path}")]
+        public Task<IActionResult> ParcelsPost(string path) => ForwardPost("parcels", path);
 
         // =======================
-        // API passthroughs required by UI JS
+        // API endpoints (JSON)
         // =======================
 
+        // Course API
         [HttpGet("/api/courses")]
         public Task<IActionResult> CoursesApi() => ForwardGet("coursesearch", "api/courses");
 
-        [HttpGet("/api/courses/all")]
-        public Task<IActionResult> CoursesAllApi() => ForwardGet("coursesearch", "api/courses/all");
-
-        [HttpGet("/api/tax")]
-        public async Task<IActionResult> TaxApi([FromQuery] decimal income)
-        {
-            // Note: some UIs call GET; the service expects POST with JSON
-            var client = _httpClientFactory.CreateClient();
-            var json = JsonSerializer.Serialize(new { income });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var resp = await client.PostAsync($"{_serviceUrls["taxcalculation"]}/api/tax/calculate", content);
-            var body = await resp.Content.ReadAsStringAsync();
-            if (!resp.IsSuccessStatusCode) return StatusCode((int)resp.StatusCode, body);
-            return Content(body, "application/json");
-        }
-
+        // Tax API
         [HttpPost("/api/tax/calculate")]
-        public async Task<IActionResult> TaxCalculateApi()
+        public Task<IActionResult> TaxCalculateApi() => ForwardPost("taxcalculation", "api/tax/calculate");
+
+        // Parcels API
+        [HttpGet("/api/parcels/{trackingNumber}")]
+        public Task<IActionResult> ParcelLookupApi(string trackingNumber)
         {
-            using var reader = new StreamReader(Request.Body, Encoding.UTF8);
-            var body = await reader.ReadToEndAsync();
-            var client = _httpClientFactory.CreateClient();
-            var content = new StringContent(string.IsNullOrWhiteSpace(body) ? "{}" : body, Encoding.UTF8, "application/json");
-            var resp = await client.PostAsync($"{_serviceUrls["taxcalculation"]}/api/tax/calculate", content);
-            var respBody = await resp.Content.ReadAsStringAsync();
-            if (!resp.IsSuccessStatusCode) return StatusCode((int)resp.StatusCode, respBody);
-            return Content(respBody, "application/json");
+            var encoded = Uri.EscapeDataString(trackingNumber ?? string.Empty);
+            return ForwardGet("parcels", $"api/parcels/{encoded}");
         }
 
         // =======================
-        // Helper: rewrite relative asset/form paths in HTML
+        // Helper: rewrite relative paths in HTML
         // =======================
         private string FixHtmlPaths(string htmlContent, string basePath)
         {

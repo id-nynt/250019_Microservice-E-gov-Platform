@@ -32,8 +32,8 @@ Accept: text/html
 
 ###
 
-# Access Tracking service through Gateway  
-GET {{APIGateway_HostAddress}}/ApiGateway/Tracking
+# Access Parcels service through Gateway  
+GET {{APIGateway_HostAddress}}/ApiGateway/Parcels
 Accept: text/html
 
 ###
@@ -65,5 +65,11 @@ Content-Type: application/json
 {
   "income": 75000
 }
+
+###
+
+# Lookup parcel by tracking number via API Gateway
+GET {{APIGateway_HostAddress}}/api/parcels/ABC123456789
+Accept: application/json
 
 ###

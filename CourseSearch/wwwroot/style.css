@@ -35,6 +35,11 @@ button {
     cursor: pointer;
 }
 
+button.secondary {
+    background: #6c757d;
+    margin-left: 8px;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -55,5 +60,9 @@ th {
     margin-top: 12px;
     color: #666;
 }
-body {
+
+.hint {
+    margin-top: 12px;
+    color: #555;
+    font-size: 0.95rem;
 }

@@ -15,7 +15,8 @@ namespace CourseSearch.Controllers
             _db = db;
         }
 
-        // GET /CourseSearch?keyword=&location=&area=&studyOption=
+        // GET /api/courses?keyword=&location=&area=&studyOption=
+        // Note: When no query parameters are provided, this returns all courses.
         [HttpGet]
         public async Task<IActionResult> Search([FromQuery] string? keyword, [FromQuery] string? location,
                                                 [FromQuery] string? area, [FromQuery] string? studyOption)
@@ -52,9 +53,5 @@ namespace CourseSearch.Controllers
 
             return Ok(results);
         }
-
-        // Get all courses
-        [HttpGet("all")]
-        public async Task<IActionResult> All() => Ok(await _db.Courses.OrderBy(c => c.CourseArea).ToListAsync());
     }
 }

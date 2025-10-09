@@ -10,11 +10,11 @@
         <h1>Course Search</h1>
 
         <div class="form-row">
-            <input id="keyword" type="text" placeholder="Keyword (course name or code)" />
+            <input id="keyword" type="text" placeholder="Keyword (course name or code, blank for all)" />
         </div>
 
         <div class="form-row">
-            <input id="location" type="text" placeholder="Location (leave blank for Any)" />
+            <input id="location" type="text" placeholder="Location (blank for Any)" />
         </div>
 
         <div class="form-row">
@@ -41,7 +41,15 @@
 
         <div class="form-row">
             <button id="searchBtn">Search</button>
+            <button id="swaggerBtn" class="secondary">Swagger</button>
         </div>
+        <p class="hint">
+            Examples:
+            <br />
+            - Keyword: "Interior Design"; Study option: "Full time"; Location: "Sydney"
+            <br />
+            - Or leave all fields blank and click Search to list all courses.
+        </p>
 
         <div id="results"></div>
     </div>

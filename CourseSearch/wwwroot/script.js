@@ -1,4 +1,19 @@
 ﻿document.getElementById("searchBtn").addEventListener("click", doSearch);
+// Trigger search on Enter key in any input/select
+for (const el of ["keyword", "location", "area", "studyOption"]) {
+    const node = document.getElementById(el);
+    node.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") doSearch();
+    });
+}
+
+// Open Swagger in a new tab for quick API checks
+const swaggerBtn = document.getElementById("swaggerBtn");
+if (swaggerBtn) {
+    swaggerBtn.addEventListener("click", () => {
+        window.open("/swagger", "_blank");
+    });
+}
 
 async function doSearch() {
     const keyword = document.getElementById("keyword").value.trim();
