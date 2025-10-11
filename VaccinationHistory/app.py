@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 import psycopg2
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='wwwroot', static_url_path='')
+
 
 def get_db_connection():
     return psycopg2.connect(
@@ -10,6 +11,10 @@ def get_db_connection():
         user='user',
         password='password'
     )
+
+@app.route('/')
+def root():
+    return app.send_static_file('index.html')
 
 @app.route('/vaccinationRecord', methods=['GET'])
 def get_user():

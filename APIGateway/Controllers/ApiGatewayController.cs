@@ -15,11 +15,11 @@ namespace ApiGateway.Controllers
         {
             { "coursesearch", "http://coursesearch:80" },
             { "taxcalculation", "http://taxcalculation:80" },
-            { "vaccination", "http://vaccination:80" },
+            { "vaccination", "http://host.docker.internal:5002" },
             { "parcels", "http://parceltracking-service:80" }
         };
 
-        // Used to rewrite relative paths in HTML (css/js/images/forms)
+        // Rewrite relative paths in HTML (css/js/images/forms)
         private readonly Dictionary<string, string> _publicRoutes = new()
         {
             { "coursesearch", "Courses" },
@@ -33,9 +33,7 @@ namespace ApiGateway.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        // =======================
         // FORWARDERS
-        // =======================
 
         private async Task<IActionResult> ForwardGet(string service, string? path = "", bool fixHtml = false)
         {
@@ -55,7 +53,15 @@ namespace ApiGateway.Controllers
             var contentType = response.Content.Headers.ContentType?.MediaType ?? "text/plain";
 
             if (!response.IsSuccessStatusCode)
-                return StatusCode((int)response.StatusCode, $"Request to {service} failed.");
+            {
+                var body = string.IsNullOrWhiteSpace(content) ? $"Request to {service} failed." : content;
+                return new ContentResult
+                {
+                    StatusCode = (int)response.StatusCode,
+                    Content = body,
+                    ContentType = contentType
+                };
+            }
 
             if (fixHtml && contentType.Contains("html"))
             {
@@ -109,9 +115,7 @@ namespace ApiGateway.Controllers
             return Content(responseContent, responseContentType);
         }
 
-        // =======================
         // Web UI endpoints (HTML)
-        // =======================
 
         [HttpGet("Courses")]
         [HttpGet("Courses/{**path}")]
@@ -141,9 +145,8 @@ namespace ApiGateway.Controllers
         [HttpPost("Parcels/{**path}")]
         public Task<IActionResult> ParcelsPost(string path) => ForwardPost("parcels", path);
 
-        // =======================
+
         // API endpoints (JSON)
-        // =======================
 
         // Course API
         [HttpGet("/api/courses")]
@@ -161,9 +164,14 @@ namespace ApiGateway.Controllers
             return ForwardGet("parcels", $"api/parcels/{encoded}");
         }
 
-        // =======================
-        // Helper: rewrite relative paths in HTML
-        // =======================
+        // Vaccination API
+        [HttpGet("/vaccinationRecord")]
+        public Task<IActionResult> VaccinationRecordRoot()
+        {
+            return ForwardGet("vaccination", "vaccinationRecord");
+        }
+
+        // Rewrite relative paths in HTML
         private string FixHtmlPaths(string htmlContent, string basePath)
         {
             var fixedContent = htmlContent;

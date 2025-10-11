@@ -6,6 +6,8 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - 5000:80
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - universe-network
   

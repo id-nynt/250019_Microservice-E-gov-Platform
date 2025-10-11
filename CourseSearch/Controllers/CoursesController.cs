@@ -15,8 +15,7 @@ namespace CourseSearch.Controllers
             _db = db;
         }
 
-        // GET /api/courses?keyword=&location=&area=&studyOption=
-        // Note: When no query parameters are provided, this returns all courses.
+        // GET
         [HttpGet]
         public async Task<IActionResult> Search([FromQuery] string? keyword, [FromQuery] string? location,
                                                 [FromQuery] string? area, [FromQuery] string? studyOption)

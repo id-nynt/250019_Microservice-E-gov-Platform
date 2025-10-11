@@ -73,3 +73,9 @@ GET {{APIGateway_HostAddress}}/api/parcels/ABC123456789
 Accept: application/json
 
 ###
+
+# Vaccination: get records for a user
+GET {{APIGateway_HostAddress}}/api/vaccinationRecord?user=123
+Accept: application/json
+
+###
