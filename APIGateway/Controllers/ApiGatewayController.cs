@@ -15,7 +15,7 @@ namespace ApiGateway.Controllers
         {
             { "coursesearch", "http://coursesearch:80" },
             { "taxcalculation", "http://taxcalculation:80" },
-            { "vaccination", "http://host.docker.internal:5002" },
+            { "vaccination", "http://vaccination_service:5002" },
             { "parcels", "http://parceltracking-service:80" }
         };
 

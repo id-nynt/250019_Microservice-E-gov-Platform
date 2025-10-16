@@ -11,3 +11,9 @@ services:
     #   - .:/app
     #   - /app/bin
     #   - /app/obj
+    networks:
+      - universe-network
+
+networks:
+  universe-network:
+    external: true
